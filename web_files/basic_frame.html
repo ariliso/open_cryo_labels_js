@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <link rel="stylesheet" href="ui.css">
+  <link rel="stylesheet" href="CRY1700_basic.css">
+  <script id="data-label-sets" type="application/json">
+    {
+      "soil_TP_digestion": ["TP 1M HCl Ex","TP 1:10 ICP Dil"],
+      "SEDEX": [
+        "I-A",
+        "I-B",
+        "I-C",
+        "II-A",
+        "II-B",
+        "II-C",
+        "III-A",
+        "III-B",
+        "III-C",
+        "IV-A",
+        "IV-B",
+        "IV-C",
+        "V-A",
+        "V-B",
+        "V-C",
+        "VI",
+        "I-A 1:10 ICP dil",
+        "I-B 1:10 ICP dil",
+        "I-C 1:10 ICP dil",
+        "II-A 1:10 ICP dil",
+        "II-B 1:10 ICP dil",
+        "II-C 1:10 ICP dil",
+        "III-A 1:10 ICP dil",
+        "III-B 1:10 ICP dil",
+        "III-C 1:10 ICP dil",
+        "IV-A 1:10 ICP dil",
+        "IV-B 1:10 ICP dil",
+        "IV-C 1:10 ICP dil",
+        "V-A 1:10 ICP dil",
+        "V-B 1:10 ICP dil",
+        "V-C 1:10 ICP dil",
+        "VI 1:10 ICP dil"
+      ],
+      "none": [""]
+    }
+  </script>
+</head>
+<body>
+  <div id="ui" class="no-print">
+    <input type="file" id="label-input" />
+    <input type="date" name="date-input" id="in-date-select">
+    <select name="label-set-box" id="label-set-box">
+      <option value="custom">Custom</option>
+    </select>
+    <input type="text" name="custom-label-name" id="txt-custom-label-set">
+  </div>
+  <div id="labels"></div>
+</body>
+<script id="js-label-fucntions" src="label_functions.js" type="text/javascript"></script>
+<script id="js-ui-fucntions" src="ui_functions.js"></script>
+</html>
