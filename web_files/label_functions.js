@@ -4,10 +4,10 @@ function createLabelElement(
   labelOwner,
   labelDate,
   ) {
-    const new_label =  document.createElement("div");
-
+    let new_label =  document.createElement("div");
+    new_label.classList.add("label")
     new_label.innerHTML =
-      labelSet + '<br/> <b>' + labelName + '</b> <br/> ' + labelOwner + '   ' + labelDate
+    '<p>' + labelSet + '<br/> <b>' + labelName + '</b> <br/> ' + labelOwner + '   ' + labelDate+ '</p>';
     return new_label;
 }
 function populateLabels(
@@ -31,7 +31,7 @@ function populateLabels(
     labelContainer.appendChild(firstPage);
 
     for (let empty_i = 0; empty_i < (skip_start % 85); empty_i++){
-      const emptyDiv = document.createElement("div");
+      let emptyDiv = document.createElement("div");
       emptyDiv.classList.add("label");
       firstPage.appendChild(emptyDiv);
     }
@@ -45,12 +45,12 @@ function populateLabels(
         const label_name = labelNames[name_i];
 
         // create new label
-        const new_label = createLabelElement(label_name,label_set,labelOwner,labelDate);
+        let new_label = createLabelElement(label_name,label_set,labelOwner,labelDate);
 
         // figure out if we need to do a page break (too many labels)
         if (labelContainer.lastElementChild.childElementCount >= labelsPerPage) {
-          const new_label_page = document.createElement("div");
-          firstPage.classList.add("labelgrid");
+          let new_label_page = document.createElement("div");
+          new_label_page.classList.add("labelgrid");
           labelContainer.appendChild(new_label_page);
         }
 
@@ -61,7 +61,7 @@ function populateLabels(
       //check if we are breaking pages (for new sets/colors)
       // page break set and `(i+1) < length` (not on last set) 
       if (page_break_set & (label_i +1 ) < labelSets.length) {
-        const new_label_page = document.createElement("div");
+        let new_label_page = document.createElement("div");
         firstPage.classList.add("labelgrid");
         labelContainer.appendChild(new_label_page);
       }

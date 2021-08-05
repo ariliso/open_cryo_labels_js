@@ -3,7 +3,7 @@ let labelsLoaded = [""];
 
 
 function loadLabels(contents) {
-  labelsLoaded = contents[0].split(/\?r\n/);
+  labelsLoaded = contents.split(/\r?\n/);
   updateLabels()
 }
 
