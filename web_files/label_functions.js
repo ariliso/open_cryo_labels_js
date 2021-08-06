@@ -60,9 +60,9 @@ function populateLabels(
 
       //check if we are breaking pages (for new sets/colors)
       // page break set and `(i+1) < length` (not on last set) 
-      if (page_break_set & (label_i +1 ) < labelSets.length) {
+      if (page_break_set & ((label_i +1 ) < labelSets.length)) {
         let new_label_page = document.createElement("div");
-        firstPage.classList.add("labelgrid");
+        new_label_page.classList.add("labelgrid");
         labelContainer.appendChild(new_label_page);
       }
     }
