@@ -32,8 +32,32 @@ function getCurrentLabelSet() {
       document.getElementById('txt-custom-label-set').value
     );
   } else{
-    //TODO extract checkbox here
-    return default_sample_sets[document.getElementById('label-set-box').value];
+
+    let current_labelset = new Array();
+
+    // check if we're using checkboxes
+    const multi_selectorList = document.getElementById('in-set-multi-check-list');
+
+    if (multi_selectorList.childElementCount > 0) {
+      // code to read buttons
+      let selected_set_btns = multi_selectorList.querySelectorAll('input:checked');
+      
+      //if no buttons are checked empy set
+      if (selected_set_btns.length<1) {
+      return [""];
+      }
+
+      for (let box_i = 0; box_i < selected_set_btns.length; box_i++) {
+        const btn_on = selected_set_btns[box_i];
+        current_labelset[box_i] = btn_on.value
+      }
+      return current_labelset;
+
+    } else {
+
+      return document.getElementById('label-set-box').value;
+      
+    };
   }
 }
 
@@ -75,6 +99,9 @@ function populateUI(){
     let control_selected = updating_controls[control_i];
       control_selected.addEventListener('change', updateLabels, false)
   }
+  //using a generic event listener for checkboxes
+  document.getElementById("in-set-multi-check")
+    .addEventListener('click',updateLabels,true)
 
 }
 
@@ -130,7 +157,7 @@ function  populateLabelSetSelector(labelSets) {
     let new_li = document.createElement("li")
 
     new_checkbox.type = "checkbox"
-    new_checkbox.checked = labelSets.length < 4; //defaults to off if too many label types
+    new_checkbox.checked = true; //defaults to off if too many label types
     new_checkbox.value = label_set_name;
     new_checkbox.name = "in-set-chk-boxes";
     new_checkbox.id = "in-set-chk-box-" + set_i+1;
