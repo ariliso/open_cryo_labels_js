@@ -50,4 +50,10 @@
     border:1px solid grey;
     vertical-align: center;
   }
+  div#ui-config textarea {
+    width: 90%;
+    white-space: pre;
+    resize: vertical;
+    height: 10em;
+  }
 }

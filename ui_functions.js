@@ -49,12 +49,14 @@ function(err, data) {
     populateUI()
   }
 });
+
+
 // ## State Management ##
 function getCurrentLabelSet() {
 
   if (document.getElementById('label-set-box').value == 'custom'){
-    return  new Array(
-      document.getElementById('txt-custom-label-set').value
+    return  readTextAreaLines(
+      document.getElementById('txt-custom-label-set')
     );
   } else{
 
@@ -80,11 +82,12 @@ function getCurrentLabelSet() {
 
     } else {
 
-      return document.getElementById('label-set-box').value;
+      return new Array(document.getElementById('label-set-box').value);
       
     };
   }
 }
+
 
 //-------------- Initial Setup of UI ----------------------
 
@@ -142,14 +145,16 @@ function updateSampleSettings(e) {
 
     multiselect_div.style.display = "none"
     document.getElementById('in-set-custom-label').style.display = "block";
+    document.getElementById('btn-customize-label-set').style.display = "none";
     updateLabels();
     return;
-  
+    
   }
   // if a sample set is selected we can continue
-
-  // hide custom box;
+  
+  // hide custom box & show customize button;
   document.getElementById('in-set-custom-label').style.display = "none"
+  document.getElementById('btn-customize-label-set').style.display = "block";
   
   //look at all available samples in set selected
   let full_selected_sample_set =
@@ -180,13 +185,40 @@ function  populateLabelSetSelector(labelSets) {
     const set_sel_option = document.createElement("option");
     set_sel_option.text = label_name;
     set_sel_option.value = label_name;
-    set_sel_option.checked = (labelSets.length<4);
     selectorList.add(set_sel_option);
+    set_sel_option.selected = true;
   }
 
 }
 
+function customizeLabelSet() {
+  // set the label to custom based on loaded set
+  let current_labelset = getCurrentLabelSet();
+  let target_textarea = document.getElementById("txt-custom-label-set");
+  // fill custom with current settings
+  fillTextArea(target_textarea,current_labelset);
+  // set box to custom
+  document.getElementById('label-set-box').value = 'custom'
+  updateSampleSettings();
+}
 
+function fillTextArea(textArea,text) {
+  if (typeof(text) == "string") {
+    textArea.value = text;
+  }else{
+    if (Array.isArray(text)) {
+      textArea.value = text.join('\n');
+    } else{
+      alert('Something went wrong: invalid textarea update');
+    }
+  }
+}
+function readTextAreaLines(textArea) {
+  return textArea.value.split('\n');
+}
+
+
+// --- Label Set Update Functions ---
 function updateLabels(e) {
 
   if (typeof(labelsLoaded) == "undefined"){
