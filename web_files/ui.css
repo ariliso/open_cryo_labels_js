@@ -11,7 +11,6 @@
   div#ui>div.ui-title{
     flex-basis: 100%;
     text-align: center;
-    margin-bottom: 3em;
     border-bottom: lightgrey;
     flex-grow: unset;
   }
@@ -38,5 +37,15 @@
     list-style: none;
     font-weight: 100;
     font-size: small;
+  }
+  #ui-info{
+    display: table-cell;
+    flex-basis: 100%;
+    font-family: 'Courier New', Courier, monospace;
+    font-weight: lighter;
+    color: grey;
+    text-align: center;
+    border:1px solid grey;
+    vertical-align: center;
   }
 }

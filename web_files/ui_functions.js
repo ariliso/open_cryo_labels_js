@@ -159,7 +159,7 @@ function updateLabels(e) {
   let label_set = getCurrentLabelSet();
   let attn = document.getElementById("in-txt-attn").value;
   let date = document.getElementById('in-date-select').value;
-  let skip_start = document.getElementById("in-skip-start").value
+  let skip_start = document.getElementById("in-skip-start").value;
   let page_break_set = document.getElementById("in-bool-sets-break").checked;
 
   //fill labels
@@ -171,9 +171,26 @@ function updateLabels(e) {
     date,
     skip_start,
     page_break_set
-  )
+  );
+  updateInfoLine(
+    name_list.length,
+    label_set.length,
+    skip_start
+  );
 }
 
+function updateInfoLine(n_names,n_sets,skip_start) {
+  let n_pages = document.getElementsByClassName("labelgrid").length;
+  let n_labels = n_names * n_sets;
+  let n_blanks = 85 * n_pages - n_labels;
+  let info_str =
+    'Created ' + n_pages + ' Pages with ' + n_labels + ' labels on them (' +
+     n_names +' sample names × ' + n_sets +' sets) there are ' + n_blanks +
+    ' blank spaces ( '+ skip_start +' skipped on the first page and '+
+     (n_blanks - skip_start) + ' from page breaks)';
+  let infoline = document.getElementById("infoline");
+  infoline.innerHTML = info_str;
+}
 
 populateUI()
 
