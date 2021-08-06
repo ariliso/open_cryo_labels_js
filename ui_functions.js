@@ -40,7 +40,7 @@ function getCurrentLabelSet() {
 
     if (multi_selectorList.childElementCount > 0) {
       // code to read buttons
-      let selected_set_btns = multi_selectorList.querySelectorAll('input:checked');
+      let selected_set_btns = multi_selectorList.querySelectorAll('option:selected');
       
       //if no buttons are checked empy set
       if (selected_set_btns.length<1) {
@@ -100,8 +100,8 @@ function populateUI(){
       control_selected.addEventListener('change', updateLabels, false)
   }
   //using a generic event listener for checkboxes
-  document.getElementById("in-set-multi-check")
-    .addEventListener('click',updateLabels,true)
+  document.getElementById("in-set-multi-check-list")
+    .addEventListener('change',updateLabels,true)
 
 }
 
@@ -109,9 +109,13 @@ function populateUI(){
 // --------------- UI Updating Functions ----------------------------------
 function updateSampleSettings(e) {
   
+  // id multiselect div
+  let multiselect_div = document.getElementById("in-set-multi-check")
   //check if we should show or hide the custom text box (Custom Label)
+
   if (document.getElementById('label-set-box').value == 'custom'){
 
+    multiselect_div.style.display = "none"
     document.getElementById('in-set-custom-label').style.display = "block";
     updateLabels();
     return;
@@ -127,8 +131,6 @@ function updateSampleSettings(e) {
     default_sample_sets[document.getElementById('label-set-box').value];
 
   
-  // id multiselect div
-  let multiselect_div = document.getElementById("in-set-multi-check")
 
   // if there are multiple label sets in selection, show selector block
   if (full_selected_sample_set.length>1){
@@ -149,29 +151,13 @@ function  populateLabelSetSelector(labelSets) {
   selectorList.textContent = ''
 
   //iterate over sample list
-  for (let set_i = 0; set_i < labelSets.length; set_i++) {
-    let label_set_name = labelSets[set_i];
-
-    let new_label = document.createElement("label");
-    let new_checkbox = document.createElement("input");
-    let new_li = document.createElement("li")
-
-    new_checkbox.type = "checkbox"
-    new_checkbox.checked = true; //defaults to off if too many label types
-    new_checkbox.value = label_set_name;
-    new_checkbox.name = "in-set-chk-boxes";
-    new_checkbox.id = "in-set-chk-box-" + set_i+1;
-
-    new_label.classList.add("in-set-check-label");
-    new_label.textContent = label_set_name;
-    new_label.htmlFor = "in-set-chk-box-" + set_i+1;
-
-    new_li.appendChild(new_checkbox);
-    new_li.appendChild(new_label);
-
-    selectorList.appendChild(new_li);
-
+  for (label_name of labelSets) {
+    const set_sel_option = document.createElement("option");
+    set_sel_option.text = label_name;
+    set_sel_option.value = label_name;
+    selectorList.add(set_sel_option);
   }
+
 }
 
 
@@ -194,7 +180,7 @@ function updateLabels(e) {
   populateLabels(
     name_list,
     label_set,
-    attn, //TODO: Replace placeholder
+    attn,
     date,
     skip_start,
     page_break_set
