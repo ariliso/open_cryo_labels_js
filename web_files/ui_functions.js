@@ -68,6 +68,14 @@ function populateUI(){
   document.getElementById('label-input')
     .addEventListener('change', readLabelFile, false);
 
+  // add event listener by class
+  let updating_controls =  document.getElementsByClassName("update_on_change")
+
+  for (let control_i = 0; control_i < updating_controls.length; control_i++) {
+    let control_selected = updating_controls[control_i];
+      control_selected.addEventListener('change', updateLabels, false)
+  }
+
 }
 
 
