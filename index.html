@@ -22,7 +22,9 @@
     <div id="ui-config">
       <div class="ui-config-names">
         <h3>Sample List</h3>
-        <input type="file" id="label-input"/>
+        <input type="file" id="label-input" accept = ".txt,mime/text"/>
+        <br>
+        <textarea name="custom-sample-names" id="in-txt-custom-sample-names" class="update_on_change"></textarea>
       </div>
       <div class="ui-config-sets">
         <h3>Label Configuration</h3>
@@ -31,11 +33,12 @@
           <select name="label-set-box" id="label-set-box">
             <option value="custom">Custom</option>
           </select>
+          <button id="btn-customize-label-set" onclick="customizeLabelSet()" style="display: none;">Customize</button>
         </div>
         <br>
         <div id="in-set-custom-label">
-          <label for="txt-custom-label-set">Custom Label</label>
-          <input type="text" name="custom-label-name" id="txt-custom-label-set" class="update_on_change">
+          <label for="txt-custom-label-set">Custom Label Set</label>
+          <textarea name="custom-label-name" id="txt-custom-label-set" class="update_on_change"></textarea>
         </div>
         <div id="in-set-multi-check">
           <select id="in-set-multi-check-list" multiple="">

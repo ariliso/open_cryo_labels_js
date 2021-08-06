@@ -1,15 +1,8 @@
-let labelsLoaded;
 let default_label_sets;
 
 // --------- Set Management Functions ----------------
 
-// ## file management ##
-
-function loadLabels(contents) {
-  labelsLoaded = contents.split(/\r?\n/);
-  updateLabels()
-}
-
+// -------  file management ---- file acquisition
 
 function readLabelFile(e) {
   var file = e.target.files[0];
@@ -19,11 +12,10 @@ function readLabelFile(e) {
   var reader = new FileReader();
   reader.onload = function(e) {
     var contents = e.target.result;
-    loadLabels(contents);
+    loadSamplesFile(contents);
   };
   reader.readAsText(file);
 }
-
 
 var getJSON = function(url, callback) {
   var xhr = new XMLHttpRequest();
@@ -40,6 +32,8 @@ var getJSON = function(url, callback) {
   xhr.send();
 };
 
+//--------file management ---- parsers and handlers -----
+
 getJSON('https://ariliso.github.io/open_cryo_labels_js/default_label_sets.json',
 function(err, data) {
   if (err !== null) {
@@ -49,12 +43,36 @@ function(err, data) {
     populateUI()
   }
 });
+
+function loadSamplesFile(contents) {
+  // splits new input in to lines
+  linesLoaded = contents.split(/\r?\n/);
+  let current_samples = getCurrentSampleSet();
+
+  // is there samples loaded?
+  if (current_samples.length > 0) {
+    // do you want to overwrite or append
+    if(!(confirm(
+        'There are ' + current_samples.length+' sample names loaded.' +
+        'Overwrite (ok|yes|confirm|accept...) or append (no|cancel)'
+    ))){
+      // append
+      fillTextArea('#in-txt-custom-sample-names',current_samples.concat(linesLoaded));
+      return;
+    }  
+  }
+
+  // overwrite if exists or empty
+  fillTextArea('#in-txt-custom-sample-names',linesLoaded);
+}
+
+
 // ## State Management ##
 function getCurrentLabelSet() {
 
   if (document.getElementById('label-set-box').value == 'custom'){
-    return  new Array(
-      document.getElementById('txt-custom-label-set').value
+    return  readTextAreaLines(
+      document.getElementById('txt-custom-label-set')
     );
   } else{
 
@@ -80,12 +98,15 @@ function getCurrentLabelSet() {
 
     } else {
 
-      return document.getElementById('label-set-box').value;
+      return new Array(document.getElementById('label-set-box').value);
       
     };
   }
 }
 
+function getCurrentSampleSet() {
+  return readTextAreaLines("#in-txt-custom-sample-names");
+}
 //-------------- Initial Setup of UI ----------------------
 
 function populateUI(){
@@ -142,14 +163,16 @@ function updateSampleSettings(e) {
 
     multiselect_div.style.display = "none"
     document.getElementById('in-set-custom-label').style.display = "block";
+    document.getElementById('btn-customize-label-set').style.display = "none";
     updateLabels();
     return;
-  
+    
   }
   // if a sample set is selected we can continue
-
-  // hide custom box;
+  
+  // hide custom box & show customize button;
   document.getElementById('in-set-custom-label').style.display = "none"
+  document.getElementById('btn-customize-label-set').style.display = "block";
   
   //look at all available samples in set selected
   let full_selected_sample_set =
@@ -180,21 +203,74 @@ function  populateLabelSetSelector(labelSets) {
     const set_sel_option = document.createElement("option");
     set_sel_option.text = label_name;
     set_sel_option.value = label_name;
-    set_sel_option.checked = (labelSets.length<4);
     selectorList.add(set_sel_option);
+    set_sel_option.selected = true;
   }
 
 }
 
+function customizeLabelSet() {
+  // set the label to custom based on loaded set
+  let current_labelset = getCurrentLabelSet();
+  let target_textarea = document.getElementById("txt-custom-label-set");
+  // fill custom with current settings
+  fillTextArea(target_textarea,current_labelset);
+  // set box to custom
+  document.getElementById('label-set-box').value = 'custom'
+  updateSampleSettings();
+}
 
+function fillTextArea(textArea,text) {
+ 
+  let target_text_area;
+
+  if (typeof(textArea) == "string") {
+    target_text_area = document.querySelector(textArea);
+  } else {    
+    target_text_area = textArea;
+  }
+  
+  if (typeof(text) == "string") {
+
+    target_text_area.value = text;
+
+  } else {
+
+    if (Array.isArray(text)) {
+      target_text_area.value = text.join('\n');
+    } else {
+      alert('Something went wrong: invalid textarea update');
+    }
+  }
+}
+
+function readTextAreaLines(textArea) {
+  let target_text_area;
+
+  if (typeof(textArea) == "string") {
+    target_text_area = document.querySelector(textArea);
+  } else {    
+    target_text_area = textArea;
+  }
+  if (target_text_area.value == "") {
+    return new Array();
+  }
+  
+  return target_text_area.value.split('\n');
+
+}
+
+
+// --- Label Set Update Functions ---
 function updateLabels(e) {
 
-  if (typeof(labelsLoaded) == "undefined"){
+  if (getCurrentSampleSet().length<1){
     return;
   };
-
+  
   //update based on document
-  let name_list = labelsLoaded;
+  
+  let name_list = getCurrentSampleSet();
   let label_set = getCurrentLabelSet();
   let attn = document.getElementById("in-txt-attn").value;
   let date = document.getElementById('in-date-select').value;
