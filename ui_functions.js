@@ -65,7 +65,7 @@ function getCurrentLabelSet() {
 
     if (multi_selectorList.childElementCount > 0) {
       // code to read buttons
-      let selected_set_btns = multi_selectorList.querySelectorAll('option:selected');
+      let selected_set_btns = multi_selectorList.querySelectorAll('option:checked');
       
       //if no buttons are checked empy set
       if (selected_set_btns.length<1) {
@@ -180,6 +180,7 @@ function  populateLabelSetSelector(labelSets) {
     const set_sel_option = document.createElement("option");
     set_sel_option.text = label_name;
     set_sel_option.value = label_name;
+    set_sel_option.checked = (labelSets.length<4);
     selectorList.add(set_sel_option);
   }
 
