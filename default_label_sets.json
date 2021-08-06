@@ -34,5 +34,25 @@
     "V-C 1:10 ICP dil",
     "VI 1:10 ICP dil"
   ],
-  "none": [""]
+  "none": [""],
+  "USPG Field": [
+    "ISCO Bottle ",
+    "DRP",
+    "DRP & NH4",
+    "DIC",
+    "DOC & TON",
+    "Isotope",
+    "IC",
+    "Colloidal P",
+    "TP Digest",
+    "NaOH Digest",
+    "TDP ICP - I",
+    "TCP ICP DUP",
+    "NaOH ICP - I",
+    "NaOH ICP - DUP",
+    "TP Digest ICP - I",
+    "TP Digest ICP - DUP",
+    "Colloidal ICP - 1",
+    "Colloidal ICP - DUP"
+  ]
 }
