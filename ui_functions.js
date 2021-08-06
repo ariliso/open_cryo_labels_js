@@ -1,9 +1,9 @@
 let default_label_sets;
 
-// --------- Set Management Functions ----------------
+//#region Set/Array Management
 
 // -------  file management ---- file acquisition
-
+//#region  File Management
 function readLabelFile(e) {
   var file = e.target.files[0];
   if (!file) {
@@ -43,6 +43,8 @@ function(err, data) {
     populateUI()
   }
 });
+//#endregion
+
 
 function loadSamplesFile(contents) {
   // splits new input in to lines
@@ -57,17 +59,104 @@ function loadSamplesFile(contents) {
         'Overwrite (ok|yes|confirm|accept...) or append (no|cancel)'
     ))){
       // append
-      fillTextArea('#in-txt-custom-sample-names',current_samples.concat(linesLoaded));
+      setCurrentSampleSet(current_samples.concat(linesLoaded));
       return;
     }  
   }
 
   // overwrite if exists or empty
-  fillTextArea('#in-txt-custom-sample-names',linesLoaded);
+  setCurrentSampleSet(linesLoaded);
 }
 
 
 // ## State Management ##
+function getCurrentState(
+  include_label_sets = false,
+  include_label_set_name = false) {
+  let stateObj = {
+      "default_label_sets": default_label_sets,
+      "current_label_sets": getCurrentLabelSet(),
+      "current_sample_set": getCurrentSampleSet(),
+      "attn": document.getElementById("in-txt-attn").value,
+      "date": document.getElementById("in-date-select").value,
+      "skip_start": document.getElementById("in-skip-start").value,
+      "page_break_set": document.getElementById("in-bool-sets-break").checked,
+      "current_label_set_name": document.getElementById('label-set-box').value
+    };
+    if (!(include_label_set_name)) {
+      delete stateObj["current_label_set_name"];
+      
+      if (!(include_label_sets)){
+        delete stateObj["default_label_sets"]
+      }
+    }
+
+  return stateObj;
+};
+
+function setCurrentState(stateObj) {
+
+  let replaced_default_label_set = false;
+  // Adjust default label sets if assigned.
+  if (stateObj.hasOwnProperty('default_label_sets')){
+    default_label_sets = stateObj["default_label_sets"]
+    replaced_default_label_set = true;
+    updateLabelSelectorBox(default_label_sets)
+  }
+
+  // Checks if we have a named set selected & if its in the sample
+  if (stateObj.hasOwnProperty('current_label_set_name')) {
+    // is the named set in our current 
+    if (default_label_sets.hasOwnProperty(stateObj["current_label_set_name"])) {
+      setCurrentLabelSet(stateObj["current_label_set_name"],true)
+    } else{
+      setCurrentLabelSet("custom",true)
+      console.log("Label set specified but not found, defaulting to custom")
+    }
+  } else {
+    // load custom label set
+    setCurrentLabelSet("custom",by_name=true)
+    // check if the current label set is set
+    if (stateObj.hasOwnProperty('current_label_sets')){
+      setCurrentLabelSet(stateObj["current_label_sets"])
+    }
+    
+  }
+  // Sample Set Settings
+  if (stateObj.hasOwnProperty("current_sample_set")) {
+    setCurrentSampleSet(stateObj["current_sample_set"])
+  }
+
+  //attn
+  if (stateObj.hasOwnProperty("attn")) {
+    document.getElementById("in-txt-attn").value = stateObj["attn"]
+  }
+  if (stateObj.hasOwnProperty("date")) {
+    document.getElementById("in-date-select").value = stateObj["date"]
+  }
+  if (stateObj.hasOwnProperty("skip_start")) {
+    document.getElementById("in-skip-start").value = stateObj["skip_start"]
+  }
+  if (stateObj.hasOwnProperty("page_break_set")) {
+    document.getElementById("in-bool-sets-break").value = stateObj["page_set_break"]
+  }
+
+}
+
+function setCurrentLabelSet(new_label_set,by_name = false) {
+  let label_set_box = document.getElementById('label-set-box');
+
+  if (by_name){
+    label_set_box.value = new_label_set;
+  }
+  if (label_set_box.value == "custom" && !(by_name)){
+    fillTextArea("#txt-custom-label-set",new_label_set);
+  }else{
+    console.log("tried to set non-custom label set")
+  }
+  updateLabelSettingsPanel()
+}
+
 function getCurrentLabelSet() {
 
   if (document.getElementById('label-set-box').value == 'custom'){
@@ -107,20 +196,17 @@ function getCurrentLabelSet() {
 function getCurrentSampleSet() {
   return readTextAreaLines("#in-txt-custom-sample-names");
 }
+
+function setCurrentSampleSet(sample_set) {
+  fillTextArea('#in-txt-custom-sample-names',sample_set)
+}
+
 //-------------- Initial Setup of UI ----------------------
 
 function populateUI(){
 
   // Fill combo box
-  
-  const set_selector = document.getElementById('label-set-box');
-
-  for (set_name in default_label_sets) {
-    const set_sel_option = document.createElement("option");
-    set_sel_option.text = set_name;
-    set_sel_option.value = set_name;
-    set_selector.add(set_sel_option);
-  }
+  updateLabelSelectorBox(default_label_sets);
 
   
 
@@ -131,29 +217,34 @@ function populateUI(){
   // ###Event Listeners:####
 
 
-  document.getElementById('label-set-box')
-    .addEventListener('change', updateSampleSettings, false);
-  // add file listener
-  
-  document.getElementById('label-input')
-    .addEventListener('change', readLabelFile, false);
-
-  // add event listener by class
-  let updating_controls =  document.getElementsByClassName("update_on_change")
-
-  for (let control_i = 0; control_i < updating_controls.length; control_i++) {
-    let control_selected = updating_controls[control_i];
-      control_selected.addEventListener('change', updateLabels, false)
-  }
-  //using a generic event listener for checkboxes
-  document.getElementById("in-set-multi-check-list")
-    .addEventListener('change',updateLabels,true)
+  refreshEventHandlers();
 
 }
 
 
+function refreshEventHandlers() {
+  document.getElementById('label-set-box')
+    .addEventListener('change', updateLabelSettingsPanel, false);
+  // add file listener
+  document.getElementById('label-input')
+    .addEventListener('change', readLabelFile, false);
+
+  // add event listener by class
+  let updating_controls = document.getElementsByClassName("update_on_change");
+
+  for (let control_i = 0; control_i < updating_controls.length; control_i++) {
+    let control_selected = updating_controls[control_i];
+    control_selected.addEventListener('change', updateLabels, false);
+  }
+  //using a generic event listener for checkboxes
+  document.getElementById("in-set-multi-check-list")
+    .addEventListener('change', updateLabels, true);
+}
+
 // --------------- UI Updating Functions ----------------------------------
-function updateSampleSettings(e) {
+
+//#region Sample Panels
+function updateLabelSettingsPanel(e) {
   
   // id multiselect div
   let multiselect_div = document.getElementById("in-set-multi-check")
@@ -191,6 +282,29 @@ function updateSampleSettings(e) {
   updateLabels()
 }
 
+//#endregion
+
+//#region Label Sets Panel
+
+function updateLabelSelectorBox(sel_label_set) {
+  let set_selector = document.getElementById('label-set-box');
+  // delete everything
+  set_selector.innerText = '';
+
+  let set_sel_custom_option = document.createElement("option");
+  set_sel_custom_option.text = "Custom";
+  set_sel_custom_option.value = "custom";
+  set_selector.add(set_sel_custom_option);
+
+  for (set_name in sel_label_set) {
+    const set_sel_option = document.createElement("option");
+    set_sel_option.text = set_name;
+    set_sel_option.value = set_name;
+    set_selector.add(set_sel_option);
+  }
+}
+
+
 function  populateLabelSetSelector(labelSets) {
 
   let selectorList = document.getElementById('in-set-multi-check-list');
@@ -212,14 +326,15 @@ function  populateLabelSetSelector(labelSets) {
 function customizeLabelSet() {
   // set the label to custom based on loaded set
   let current_labelset = getCurrentLabelSet();
-  let target_textarea = document.getElementById("txt-custom-label-set");
   // fill custom with current settings
-  fillTextArea(target_textarea,current_labelset);
+  fillTextArea("#txt-custom-label-set",current_labelset);
   // set box to custom
   document.getElementById('label-set-box').value = 'custom'
-  updateSampleSettings();
+  updateLabelSettingsPanel();
 }
+//#endregion
 
+//#region Text Area Helpers
 function fillTextArea(textArea,text) {
  
   let target_text_area;
@@ -259,6 +374,8 @@ function readTextAreaLines(textArea) {
   return target_text_area.value.split('\n');
 
 }
+
+//#endregion Text Area Helpers
 
 
 // --- Label Set Update Functions ---
