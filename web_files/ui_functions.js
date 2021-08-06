@@ -130,7 +130,7 @@ function  populateLabelSetSelector(labelSets) {
     let new_li = document.createElement("li")
 
     new_checkbox.type = "checkbox"
-    new_checkbox.checked = labelSets.length< 2; //defaults to off if too many label types
+    new_checkbox.checked = labelSets.length < 4; //defaults to off if too many label types
     new_checkbox.value = label_set_name;
     new_checkbox.name = "in-set-chk-boxes";
     new_checkbox.id = "in-set-chk-box-" + set_i+1;
