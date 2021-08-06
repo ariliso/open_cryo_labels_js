@@ -26,7 +26,7 @@
     border-top:1px solid grey;
   }
   div#ui-config>div{
-    padding-bottom: 1em;
+    padding: 1em;
     border: 1px dotted lightgrey;
     flex-grow: 1;
   }
@@ -51,7 +51,7 @@
     vertical-align: center;
   }
   div#ui-config textarea {
-    width: 90%;
+    width: 100%;
     white-space: pre;
     resize: vertical;
     height: 10em;
