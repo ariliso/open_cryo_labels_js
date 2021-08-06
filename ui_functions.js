@@ -1,10 +1,9 @@
-const default_sample_sets = JSON.parse(document.getElementById('data-label-sets').innerText);
 let labelsLoaded;
-
+let default_label_sets;
 
 // --------- Set Management Functions ----------------
 
-// ## file management
+// ## file management ##
 
 function loadLabels(contents) {
   labelsLoaded = contents.split(/\r?\n/);
@@ -25,6 +24,32 @@ function readLabelFile(e) {
   reader.readAsText(file);
 }
 
+
+var getJSON = function(url, callback) {
+  var xhr = new XMLHttpRequest();
+  xhr.open('GET', url, true);
+  xhr.responseType = 'json';
+  xhr.onload = function() {
+    var status = xhr.status;
+    if (status === 200) {
+      callback(null, xhr.response);
+    } else {
+      callback(status, xhr.response);
+    }
+  };
+  xhr.send();
+};
+
+getJSON('https://ariliso.github.io/open_cryo_labels_js/default_label_sets.json',
+function(err, data) {
+  if (err !== null) {
+    alert('Something went wrong: ' + err);
+  } else {
+    default_label_sets = data;
+    populateUI()
+  }
+});
+// ## State Management ##
 function getCurrentLabelSet() {
 
   if (document.getElementById('label-set-box').value == 'custom'){
@@ -69,7 +94,7 @@ function populateUI(){
   
   const set_selector = document.getElementById('label-set-box');
 
-  for (set_name in default_sample_sets) {
+  for (set_name in default_label_sets) {
     const set_sel_option = document.createElement("option");
     set_sel_option.text = set_name;
     set_sel_option.value = set_name;
@@ -128,7 +153,7 @@ function updateSampleSettings(e) {
   
   //look at all available samples in set selected
   let full_selected_sample_set =
-    default_sample_sets[document.getElementById('label-set-box').value];
+    default_label_sets[document.getElementById('label-set-box').value];
 
   
 
@@ -204,6 +229,3 @@ function updateInfoLine(n_names,n_sets,skip_start) {
   let infoline = document.getElementById("infoline");
   infoline.innerHTML = info_str;
 }
-
-populateUI()
-
