@@ -61,6 +61,6 @@
   font-weight: 100;
   text-align: center;
 }
-B.label{
-  font-weight: 900;
+.label b{
+  font-weight: bold;
 }
