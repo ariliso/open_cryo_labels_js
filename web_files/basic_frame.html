@@ -46,15 +46,63 @@
   </script>
 </head>
 <body>
+
   <div id="ui" class="no-print">
-    <input type="file" id="label-input" />
-    <input type="date" name="date-input" id="in-date-select">
-    <select name="label-set-box" id="label-set-box">
-      <option value="custom">Custom</option>
-    </select>
-    <input type="text" name="custom-label-name" id="txt-custom-label-set">
+    
+    <div class="ui-title">
+      <h1>Sample Label Maker v.0.1</h1>
+      <p>By: Ariel Lisogorsky</p>
+      <em>works best in chrome</em>
+    </div>
+
+    <div id="ui-config">
+      <div class="ui-config-names">
+        <h3>Sample List</h3>
+        <input type="file" id="label-input"/>
+      </div>
+      <div class="ui-config-sets">
+        <h3>Label Configuration</h3>
+        <div id="in-set-select">
+          <label for="label-set-box">Label Set</label>
+          <select name="label-set-box" id="label-set-box">
+            <option value="custom">Custom</option>
+          </select>
+        </div>
+        <br>
+        <div id="in-set-custom-label">
+          <label for="txt-custom-label-set">Custom Label</label>
+          <input type="text" name="custom-label-name" id="txt-custom-label-set" class="update_on_change">
+        </div>
+        <div id="in-set-multi-check">
+          <ul id="in-set-multi-check-list">
+          </ul>
+        </div>
+      </div>
+      
+      <div class="ui-ids">
+        <h3>Run Information</h3>
+        <label for="in-txt-attn">ATTN:</label>
+        <input type="text" name="in-txt-attn" id="in-txt-attn" class="update_on_change">
+        <br>
+        <label for="in-date-select">Date</label>
+        <input type="date" name="date-input" id="in-date-select" class="update_on_change">
+      </div>
+      <div class="ui-print">
+        <h3>Print Configuration</h3>
+        <div id="in-set-breaks">
+          <label for="break-for-sets">Page Break After Sets </label>
+          <input type="checkbox" name="break-for-sets" id="in-bool-sets-break", class="update_on_change">
+        </div>
+        <label for="in-skip-start">Preceding Blank Spots </label>
+        <input type="number" name="in-skip-start" id="in-skip-start" min="0" max="84", class="update_on_change">
+      </div>
+      
+    </div>
   </div>
-  <div id="labels"></div>
+    
+  <div id="labels">
+    <!-- this will be populated with labels by javascript -->
+  </div>
 </body>
 <script id="js-label-fucntions" src="label_functions.js" type="text/javascript"></script>
 <script id="js-ui-fucntions" src="ui_functions.js"></script>

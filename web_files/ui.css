@@ -1,7 +1,37 @@
 @media screen {
 
-  div.ui{
+  div#ui{
     display: flex;
-  }
+    flex-wrap: wrap;
 
+    border: 2px solid gray;
+    border-radius: 1em;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+  }
+  div#ui>div.ui-title{
+    flex-basis: 100%;
+    text-align: center;
+    margin-bottom: 3em;
+    border-bottom: lightgrey;
+    flex-grow: unset;
+  }
+  div#ui>div.ui-title h1{
+    margin-bottom: .25em;
+  }
+  div#ui-config{
+    flex-basis: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+
+    border-top:1px solid grey;
+  }
+  div#ui-config>div{
+    padding-bottom: 1em;
+    border: 1px dotted lightgrey;
+    flex-grow: 1;
+  }
+  div#ui-config>div h3{
+    text-align: center;
+  }
 }
