@@ -34,15 +34,45 @@ var getJSON = function(url, callback) {
 
 //--------file management ---- parsers and handlers -----
 
+
+//loads remote JSON
 getJSON('https://ariliso.github.io/open_cryo_labels_js/default_label_sets.json',
 function(err, data) {
   if (err !== null) {
+    //TODO code fallback here
     alert('Something went wrong: ' + err);
   } else {
     default_label_sets = data;
     populateUI()
   }
 });
+
+
+function downloadStateObject(e,
+  save_type = document.querySelector("#select-conf-save-type").value
+) {
+  let stateObj = getCurrentState()
+
+  switch (save_type) {
+
+    case "inc_labels":
+      delete stateObj["current_label_set_name"];
+      break;
+
+    case "inc_labels&selection":
+      break;
+
+    default:
+      delete stateObj["current_label_set_name"];
+      delete stateObj["default_label_sets"]
+      break;
+  }
+
+  out_txt = JSON.stringify(stateObj,null,2)
+  downloadToFile(out_txt,stateObj.date+ "_label_settings"+ ".json","mime/JSON",true)
+}
+
+
 //#endregion
 
 
@@ -69,10 +99,11 @@ function loadSamplesFile(contents) {
 }
 
 
+//#endregion
+
+
 // ## State Management ##
-function getCurrentState(
-  include_label_sets = false,
-  include_label_set_name = false) {
+function getCurrentState() {
   let stateObj = {
       "default_label_sets": default_label_sets,
       "current_label_sets": getCurrentLabelSet(),
@@ -83,14 +114,6 @@ function getCurrentState(
       "page_break_set": document.getElementById("in-bool-sets-break").checked,
       "current_label_set_name": document.getElementById('label-set-box').value
     };
-    if (!(include_label_set_name)) {
-      delete stateObj["current_label_set_name"];
-      
-      if (!(include_label_sets)){
-        delete stateObj["default_label_sets"]
-      }
-    }
-
   return stateObj;
 };
 
@@ -219,13 +242,18 @@ function populateUI(){
 
   refreshEventHandlers();
 
+  updateAdvancedSettingState();
+
 }
 
 
 function refreshEventHandlers() {
+
+
   document.getElementById('label-set-box')
-    .addEventListener('change', updateLabelSettingsPanel, false);
-  // add file listener
+    .addEventListener('change', updateLabelSettingsPanel, false)
+    ;
+  // add file listeners
   document.getElementById('label-input')
     .addEventListener('change', readLabelFile, false);
 
@@ -239,6 +267,13 @@ function refreshEventHandlers() {
   //using a generic event listener for checkboxes
   document.getElementById("in-set-multi-check-list")
     .addEventListener('change', updateLabels, true);
+
+  /// for proper advanced settings functionality
+  document.querySelector("#toggle-adv-settings")
+    .addEventListener('change', updateAdvancedSettingState,false)
+
+  document.querySelector("#bt-save-conf")
+    .addEventListener('click',downloadStateObject,false)
 }
 
 // --------------- UI Updating Functions ----------------------------------
@@ -333,6 +368,16 @@ function customizeLabelSet() {
   updateLabelSettingsPanel();
 }
 //#endregion
+
+function updateAdvancedSettingState(e){
+  let settings_panel = document.getElementById("ui-adv-config");
+  let toggle_state = document.querySelector("#toggle-adv-settings").checked;
+  if (toggle_state){
+    settings_panel.style.display = null;
+  } else {
+    settings_panel.style.display = "none"; 
+  }
+}
 
 //#region Text Area Helpers
 function fillTextArea(textArea,text) {

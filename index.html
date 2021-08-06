@@ -73,15 +73,15 @@
         <label for="toggle-adv-settings">Advanced Settings: </label>
         <input type="checkbox" name="toggle-adv-settings" id="toggle-adv-settings">
       </div>
-      
+
       <div id="ui-adv-config" class = "advanced settings">
         <label for="bt-load-conf">open config file: </label>
         <input type="file" name="bt-load-conf" id="bt-load-conf" accept=".json,mime/JSON">
         <button id="bt-save-conf">Save Configuration</button>
           <select name="select-conf-save-type" id="select-conf-save-type">
-            <option value="Custom Samples" id="save-type-id-1">Custom Samples</option>
-            <option value="Current Label Sets" id="save-type-id-2">Current Label Sets</option>
-            <option value="Current Set & Selection" id="save-type-id-3">Current Set & Selection</option>
+            <option value="custom" id="save-type-id-1">Custom Samples</option>
+            <option value="inc_labels" id="save-type-id-2">Current Label Sets</option>
+            <option value="inc_labels&selection" id="save-type-id-3">Current Set & Selection</option>
           </select>
       </div>
     </div>
