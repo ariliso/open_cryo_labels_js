@@ -33,10 +33,12 @@
   div#ui-config>div h3{
     text-align: center;
   }
+  #in-set-multi-check{
+    display: none;
+  }
   #in-set-multi-check-list{
-    list-style: none;
-    font-weight: 100;
-    font-size: small;
+    height: 10em;
+    width: 100%;
   }
   #ui-info{
     display: table-cell;
