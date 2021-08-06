@@ -109,7 +109,7 @@ function updateSampleSettings(e) {
     populateLabelSetSelector(full_selected_sample_set)
   } else{
     multiselect_div.style.display = "none"
-    multiselect_div.lastElementChild().textContent = ''
+    multiselect_div.lastElementChild.textContent = ''
   }
   updateLabels()
 }
