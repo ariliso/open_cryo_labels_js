@@ -34,4 +34,9 @@
   div#ui-config>div h3{
     text-align: center;
   }
+  #in-set-multi-check-list{
+    list-style: none;
+    font-weight: 100;
+    font-size: small;
+  }
 }
