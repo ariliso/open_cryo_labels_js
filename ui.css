@@ -56,4 +56,14 @@
     resize: vertical;
     height: 10em;
   }
+  div#ui-saveconf,
+  div#ui-saveconf div{
+    display: flex;
+    justify-content: center;
+    flex-basis: 100%;
+    padding: 0.5em;
+  }
+  div#ui-saveconf{
+    flex-wrap: wrap;
+  }
 }
