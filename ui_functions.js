@@ -17,6 +17,20 @@ function readLabelFile(e) {
   reader.readAsText(file);
 }
 
+function readConfigFile(e) {
+  var file = e.target.files[0];
+  if (!file) {
+    return;
+  }
+  var reader = new FileReader();
+  reader.onload = function(e) {
+    var contents = e.target.result;
+    setCurrentState(JSON.parse(contents));
+  };
+  reader.readAsText(file);
+}
+
+
 var getJSON = function(url, callback) {
   var xhr = new XMLHttpRequest();
   xhr.open('GET', url, true);
@@ -131,10 +145,17 @@ function setCurrentState(stateObj) {
   if (stateObj.hasOwnProperty('current_label_set_name')) {
     // is the named set in our current 
     if (default_label_sets.hasOwnProperty(stateObj["current_label_set_name"])) {
+      //TODO: re-select checkboxes based on content
       setCurrentLabelSet(stateObj["current_label_set_name"],true)
     } else{
       setCurrentLabelSet("custom",true)
       console.log("Label set specified but not found, defaulting to custom")
+    }
+    if(stateObj["current_label_set_name"] == "custom"){
+      setCurrentLabelSet("custom",true);
+      if (stateObj.hasOwnProperty('current_label_sets')){
+        setCurrentLabelSet(stateObj["current_label_sets"])
+      }
     }
   } else {
     // load custom label set
@@ -163,7 +184,7 @@ function setCurrentState(stateObj) {
   if (stateObj.hasOwnProperty("page_break_set")) {
     document.getElementById("in-bool-sets-break").value = stateObj["page_set_break"]
   }
-
+  populateUI()
 }
 
 function setCurrentLabelSet(new_label_set,by_name = false) {
@@ -274,6 +295,9 @@ function refreshEventHandlers() {
 
   document.querySelector("#bt-save-conf")
     .addEventListener('click',downloadStateObject,false)
+
+  document.querySelector('#bt-load-conf')
+    .addEventListener('change',readConfigFile,false)
 }
 
 // --------------- UI Updating Functions ----------------------------------
@@ -468,3 +492,4 @@ function updateInfoLine(n_names,n_sets,skip_start) {
   let infoline = document.getElementById("infoline");
   infoline.innerHTML = info_str;
 }
+populateUI()
