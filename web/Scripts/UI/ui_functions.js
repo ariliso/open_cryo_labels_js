@@ -50,7 +50,7 @@ var getJSON = function(url, callback) {
 
 
 //loads remote JSON
-getJSON('https://ariliso.github.io/open_cryo_labels_js/default_label_sets.json',
+getJSON('https://ariliso.github.io/open_cryo_labels_js/Config/default_label_sets.json',
 function(err, data) {
   if (err !== null) {
     //TODO code fallback here
