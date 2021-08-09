@@ -111,8 +111,6 @@ function loadSamplesFile(contents) {
   // overwrite if exists or empty
   setCurrentSampleSet(linesLoaded);
 }
-
-
 //#endregion
 
 
@@ -192,12 +190,14 @@ function setCurrentLabelSet(new_label_set,by_name = false) {
 
   if (by_name){
     label_set_box.value = new_label_set;
-  }
-  if (label_set_box.value == "custom" && !(by_name)){
-    fillTextArea("#txt-custom-label-set",new_label_set);
   }else{
-    console.log("tried to set non-custom label set")
+    if (label_set_box.value == "custom"){
+      fillTextArea("#txt-custom-label-set",new_label_set);
+    }else{
+      console.log("tried to set non-custom label set")
+    }
   }
+  
   updateLabelSettingsPanel()
 }
 

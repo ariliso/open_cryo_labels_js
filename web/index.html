@@ -2,20 +2,29 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <link rel="stylesheet" href="ui.css">
-  <link rel="stylesheet" href="CRY1700_basic.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="A simple webapp to create labels">
+  <meta name="author" content="Ari Lisogorsky">
+  <link rel="stylesheet" href="CSS/ui.css">
+  <link rel="stylesheet" href="CSS/CRY1700_basic.css">
+  
 </head>
 <body>
 
   <div id="ui" class="no-print">
     
     <div class="ui-title">
-      <h1>Sample Label Maker v.0.2</h1>
+      <h1>Sample Label Maker v.0.5</h1>
       <p>By: Ariel Lisogorsky</p>
       <em>works best in chrome</em>
     </div>
 
     <div id="ui-info">
+      <p id="infoline-static" class="infoline">This project is developed
+        <a href="https://github.com/ariliso/open_cryo_labels_js">on github</a>
+        If you have changes or suggestions, you can add them
+        <a href="https://github.com/ariliso/open_cryo_labels_js/issues">here</a>
+      </p>
       <p id="infoline" class="infoline">Please load a text file with a sample name in each row</p>
     </div>
 
@@ -93,7 +102,7 @@
     <!-- this will be populated with labels by javascript -->
   </div>
 </body>
-<script id="js-label-fucntions" src="label_functions.js" type="text/javascript"></script>
-<script id="js-ui-fucntions" src="ui_functions.js"></script>
-<script id="js-save_file" src="save_file.js"></script>
+<script id="js-label-fucntions" src="Scripts/label_functions.js" type="text/javascript"></script>
+<script id="js-ui-fucntions" src="Scripts/UI/ui_functions.js"></script>
+<script id="js-save_file" src="Scripts/UI/save_file.js"></script>
 </html>
