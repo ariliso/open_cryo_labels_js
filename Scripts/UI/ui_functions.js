@@ -175,13 +175,15 @@ function setCurrentState(stateObj) {
   if (stateObj.hasOwnProperty("page_break_set")) {
     document.getElementById("in-bool-sets-break").value = stateObj["page_set_break"]
   }
-  populateUI()
+  updateLabels()
 }
 
 function setCurrentLabelSet(new_label_set,set_name) {
   let label_set_box = document.getElementById('label-set-box');
+  let possible_values = Array.from(label_set_box.options).map(e => e.value)
 
   if (set_name != undefined){
+    if (possible_values.includes(set_name))
     label_set_box.value = set_name;
   }else{
     if (label_set_box.value != "custom"){
