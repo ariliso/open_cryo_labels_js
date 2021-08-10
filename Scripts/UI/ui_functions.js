@@ -9,12 +9,24 @@ function readLabelFile(e) {
   if (!file) {
     return;
   }
-  var reader = new FileReader();
-  reader.onload = function(e) {
-    var contents = e.target.result;
-    loadSamplesFile(contents);
-  };
-  reader.readAsText(file);
+  switch (file.type) {
+    case 'application/json':
+      console.log("Parser for JSON not yet implemented");
+      break;
+    case 'application/csv':
+      processCsvSamples(file);
+    break;
+    
+    default:
+
+      var reader = new FileReader();
+      reader.onload = function(e) {
+        var contents = e.target.result;
+        loadSamplesFile(contents);
+      };
+      reader.readAsText(file);
+    break;
+  }
 }
 
 function readConfigFile(e) {
@@ -88,7 +100,22 @@ function downloadStateObject(e,
 
 
 //#endregion
+function importCsv(CsvFile) {
+  // open a popup to configure settings here
 
+
+  Papa.parse(CsvFile,
+    {
+      header: hasHeader,
+      transform: (hasHeader && transformFn != undefined)? transformFn : undefined,
+      complete: processCsvSamples
+    }
+  );
+}
+ 
+function processCsvSamples(CsvObjects) {
+ console.log("not yet implemented");
+}
 
 function loadSamplesFile(contents) {
   // splits new input in to lines
@@ -245,6 +272,7 @@ function setCurrentSampleSet(sample_set) {
 
 function populateUI(){
 
+  
   // Fill combo box
   updateLabelSelectorBox(default_label_sets);
 
