@@ -144,24 +144,17 @@ function setCurrentState(stateObj) {
     // is the named set in our current 
     if (default_label_sets.hasOwnProperty(stateObj["current_label_set_name"])) {
       //TODO: re-select checkboxes based on content
-      setCurrentLabelSet(stateObj["current_label_set_name"],true)
+      setCurrentLabelSet(stateObj["current_label_sets"],stateObj["current_label_set_name"])
     } else{
-      setCurrentLabelSet("custom",true)
+      setCurrentLabelSet(stateObj["current_label_sets"],"custom")
       console.log("Label set specified but not found, defaulting to custom")
     }
     if(stateObj["current_label_set_name"] == "custom"){
-      setCurrentLabelSet("custom",true);
-      if (stateObj.hasOwnProperty('current_label_sets')){
-        setCurrentLabelSet(stateObj["current_label_sets"])
-      }
+      setCurrentLabelSet(stateObj["current_label_sets"],"custom");
     }
   } else {
     // load custom label set
-    setCurrentLabelSet("custom",by_name=true)
-    // check if the current label set is set
-    if (stateObj.hasOwnProperty('current_label_sets')){
-      setCurrentLabelSet(stateObj["current_label_sets"])
-    }
+    setCurrentLabelSet(stateObj["current_label_sets"],"custom");
     
   }
   // Sample Set Settings
@@ -185,20 +178,21 @@ function setCurrentState(stateObj) {
   populateUI()
 }
 
-function setCurrentLabelSet(new_label_set,by_name = false) {
+function setCurrentLabelSet(new_label_set,set_name) {
   let label_set_box = document.getElementById('label-set-box');
 
-  if (by_name){
-    label_set_box.value = new_label_set;
+  if (set_name != undefined){
+    label_set_box.value = set_name;
   }else{
-    if (label_set_box.value == "custom"){
-      fillTextArea("#txt-custom-label-set",new_label_set);
-    }else{
-      console.log("tried to set non-custom label set")
+    if (label_set_box.value != "custom"){
+      console.log("attempting to set values of non-custom label set, this is experimental at best")
     }
   }
-  
-  updateLabelSettingsPanel()
+  if (new_label_set == undefined){
+    console.log(`Attempted to set labels with undefined set, unless this is to update the selection box to {set_name} this could be an error`)
+  } else{
+    updateLabelSettingsPanel(undefined,new_label_set)
+  }
 }
 
 function getCurrentLabelSet() {
@@ -303,7 +297,7 @@ function refreshEventHandlers() {
 // --------------- UI Updating Functions ----------------------------------
 
 //#region Sample Panels
-function updateLabelSettingsPanel(e) {
+function updateLabelSettingsPanel(e,selected_samples = ["all"]) {
   
   // id multiselect div
   let multiselect_div = document.getElementById("in-set-multi-check")
@@ -313,6 +307,7 @@ function updateLabelSettingsPanel(e) {
 
     multiselect_div.style.display = "none"
     document.getElementById('in-set-custom-label').style.display = "block";
+    if (selected_samples != ['all']) {fillTextArea("#txt-custom-label-set",selected_samples)}
     document.getElementById('btn-customize-label-set').style.display = "none";
     updateLabels();
     return;
@@ -328,12 +323,11 @@ function updateLabelSettingsPanel(e) {
   let full_selected_sample_set =
     default_label_sets[document.getElementById('label-set-box').value];
 
-  
 
   // if there are multiple label sets in selection, show selector block
   if (full_selected_sample_set.length>1){
     multiselect_div.style.display = "block"
-    populateLabelSetSelector(full_selected_sample_set)
+    populateLabelSetSelector(full_selected_sample_set,selected_samples)
   } else{
     multiselect_div.style.display = "none"
     multiselect_div.lastElementChild.textContent = ''
@@ -364,9 +358,10 @@ function updateLabelSelectorBox(sel_label_set) {
 }
 
 
-function  populateLabelSetSelector(labelSets) {
+function  populateLabelSetSelector(labelSets,selectedSets) {
 
   let selectorList = document.getElementById('in-set-multi-check-list');
+  if (selectedSets == undefined || selectedSets == 'all') selectedSets = labelSets;
   
   // wipe all elements inside
   selectorList.textContent = ''
@@ -377,7 +372,7 @@ function  populateLabelSetSelector(labelSets) {
     set_sel_option.text = label_name;
     set_sel_option.value = label_name;
     selectorList.add(set_sel_option);
-    set_sel_option.selected = true;
+    set_sel_option.selected = selectedSets.includes(label_name);
   }
 
 }
