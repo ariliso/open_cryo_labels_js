@@ -386,7 +386,7 @@ function customizeLabelSet() {
   fillTextArea("#txt-custom-label-set",current_labelset);
   // set box to custom
   document.getElementById('label-set-box').value = 'custom'
-  updateLabelSettingsPanel();
+  updateLabelSettingsPanel(null,current_labelset);
 }
 //#endregion
 
