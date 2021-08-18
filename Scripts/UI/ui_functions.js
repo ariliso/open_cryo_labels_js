@@ -279,7 +279,7 @@ function refreshEventHandlers() {
 
   for (let control_i = 0; control_i < updating_controls.length; control_i++) {
     let control_selected = updating_controls[control_i];
-    control_selected.addEventListener('change', updateLabels, false);
+    control_selected.addEventListener('input', updateLabels, false);
   }
   //using a generic event listener for checkboxes
   document.getElementById("in-set-multi-check-list")
