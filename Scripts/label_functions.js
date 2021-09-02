@@ -3,9 +3,32 @@ function createLabelElement(
   labelSet,
   labelOwner,
   labelDate,
+  specialLabels = true,
   ) {
     let new_label =  document.createElement("div");
     new_label.classList.add("label")
+    if (specialLabels & labelSet.charAt(0) == "\#"){
+      switch (labelSet) {
+        case "\#QRcode":
+          var QR = QRCode.generateSVG(
+            labelName,
+            {
+              ecclevel: "M",
+              margin: 0.002,
+            }
+          )
+          QR.style.height =  "100%";
+          QR.style.minHeight = "100%"
+          QR.style.flexShrink = 0;
+          new_label.innerHTML = `${labelName} <br/> ${labelOwner}`
+          new_label.appendChild(QR);
+          return new_label;
+      
+        default:
+          break;
+      }
+      
+    }
     new_label.innerHTML =
     '<p>' + labelSet + '<br/> <b>' + labelName + '</b> <br/> ' + labelOwner + '   ' + labelDate+ '</p>';
     return new_label;
@@ -16,7 +39,8 @@ function populateLabels(
   labelOwner,
   labelDate =  new Date().toISOString().slice(0, 10),
   skip_start = 0,
-  page_break_set = false
+  page_break_set = false,
+  specialLabels = false
   ) {
     
     const labelsPerPage = 85;
@@ -45,7 +69,7 @@ function populateLabels(
         const label_name = labelNames[name_i];
 
         // create new label
-        let new_label = createLabelElement(label_name,label_set,labelOwner,labelDate);
+        let new_label = createLabelElement(label_name,label_set,labelOwner,labelDate,specialLabels);
 
         // figure out if we need to do a page break (too many labels)
         if (labelContainer.lastElementChild.childElementCount >= labelsPerPage) {

@@ -459,6 +459,7 @@ function updateLabels(e) {
   let date = document.getElementById('in-date-select').value;
   let skip_start = document.getElementById("in-skip-start").value;
   let page_break_set = document.getElementById("in-bool-sets-break").checked;
+  let include_QR = document.getElementById("chk-spec-lbl").checked;
 
   //fill labels
 
@@ -468,7 +469,8 @@ function updateLabels(e) {
     attn,
     date,
     skip_start,
-    page_break_set
+    page_break_set,
+    include_QR
   );
   updateInfoLine(
     name_list.length,
