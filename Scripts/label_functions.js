@@ -8,8 +8,12 @@ function createLabelElement(
     let new_label =  document.createElement("div");
     new_label.classList.add("label")
     if (specialLabels & labelSet.charAt(0) == "\#"){
+    let lblPar = document.createElement('p');
+    let printPar = true;
       switch (labelSet) {
-        case "\#QRcode":
+        case "\#QRonly":
+          printPar = false;
+        case "\#QR":
           var QR = QRCode.generateSVG(
             labelName,
             {
@@ -20,7 +24,9 @@ function createLabelElement(
           QR.style.height =  "100%";
           QR.style.minHeight = "100%"
           QR.style.flexShrink = 0;
-          new_label.innerHTML = `${labelName} <br/> ${labelOwner}`
+          printPar && (lblPar.innerHTML = `${labelName} ${labelOwner && '<br/>' + labelOwner}`);
+          lblPar.style.paddingRight = "1em";
+          new_label.appendChild(lblPar)
           new_label.appendChild(QR);
           return new_label;
       
