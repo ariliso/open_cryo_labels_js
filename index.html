@@ -30,7 +30,8 @@
   <body>
     <div id="ui" class="no-print">
       <div class="ui-title">
-        <h1>Sample Label Maker v.0.7</h1>
+        <h1>Sample Label Maker v.0.8</h1>
+        <em>v0.8: QRiousity killed lachat</em>
         <p>By: Ariel Lisogorsky</p>
         <em>works best in chrome</em>
         <p id="infoline-static">
@@ -40,8 +41,8 @@
           <a href="https://github.com/ariliso/open_cryo_labels_js/issues"
             >here.</a
           >
-          </p>
-          <p>
+        </p>
+        <p>
           The labels are currently set to use the
           <a href="https://brailleinstitute.org/freefont"
             >Atkinson Hyperlegible</a
@@ -165,6 +166,13 @@
         </div>
 
         <div id="ui-adv-config" class="advanced settings">
+          <label for="chk-spec-lbl">Interpret "#" codes</label>
+          <input
+            type="checkbox"
+            name="chk-spec-lbl"
+            id="chk-spec-lbl"
+            checked
+          />
           <label for="bt-load-conf">open config file: </label>
           <input
             type="file"
@@ -192,6 +200,7 @@
       <!-- this will be populated with labels by javascript -->
     </div>
   </body>
+  <script src="https://unpkg.com/qrjs2@latest/js/qrjs2.js"></script>
   <script
     id="js-label-fucntions"
     src="Scripts/label_functions.js"
