@@ -427,7 +427,7 @@ function readTextAreaLines(textArea) {
     target_text_area = textArea;
   }
   if (target_text_area.value == "") {
-    return new Array();
+    return new Array("");
   }
 
   return target_text_area.value.split("\n");
@@ -437,17 +437,21 @@ function readTextAreaLines(textArea) {
 
 // --- Label Set Update Functions ---
 function updateLabels(e) {
-  if (getCurrentSampleSet().length < 1) {
-    return;
-  }
+  // if (getCurrentSampleSet().length < 1) {
+  //   return;
+  // }
 
   //update based on document
 
-  let name_list = getCurrentSampleSet();
+  let name_list = getCurrentSampleSet() || [""];
   let label_set = getCurrentLabelSet();
   let attn = document.getElementById("in-txt-attn").value;
   let date = document.getElementById("in-date-select").value;
-  let skip_start = document.getElementById("in-skip-start").value;
+  let labelsPerPage = getLabelLayout().nPerPage;
+  let skip_start = document
+    .getElementById("in-skip-start")
+    .value.split(",")
+    .map((skipi) => Math.max(0, Math.min(labelsPerPage, parseInt(skipi))));
   let page_break_set = document.getElementById("in-bool-sets-break").checked;
   let include_QR = document.getElementById("chk-spec-lbl").checked;
 
@@ -459,6 +463,7 @@ function updateLabels(e) {
     attn,
     date,
     skip_start,
+    labelsPerPage,
     page_break_set,
     include_QR
   );
@@ -478,14 +483,27 @@ function updateInfoLine(n_names, n_sets, skip_start) {
     n_names +
     " sample names × " +
     n_sets +
-    " sets) there are " +
-    n_blanks +
-    " blank spaces ( " +
+    " sets) Skipped: (" +
     skip_start +
-    " skipped on the first page and " +
-    (n_blanks - skip_start) +
-    " from page breaks)";
+    ")";
+
   let infoline = document.getElementById("infoline");
   infoline.innerHTML = info_str;
+}
+
+function getLabelLayout() {
+  let tempGrid = document.createElement("div");
+  document.lastChild.appendChild(tempGrid);
+  tempGrid.classList.add("labelgrid");
+  let compStyles = getComputedStyle(tempGrid);
+  let rows = compStyles.getPropertyValue("--n-rows");
+  let cols = compStyles.getPropertyValue("--n-cols");
+  let nPerPage = rows * cols;
+  tempGrid.remove();
+  return {
+    rows,
+    cols,
+    nPerPage,
+  };
 }
 populateUI();

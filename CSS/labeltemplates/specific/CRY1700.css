@@ -1,0 +1,23 @@
+@media screen {
+  .label {
+    border-radius: 0.125in;
+  }
+}
+.labelgrid {
+  
+  --page-width: 8.5in;
+  --page-height: 11in;
+
+  --n-rows: 17;
+  --n-cols: 5;
+
+  --label-width: 1.28in;
+  --label-height: 0.5in;
+
+  --label-pitch-vert: 0.63in;
+  --label-pitch-hor:  1.4in;
+
+  --top-margin: 0.24in;
+  --side-margin: 0.77in;
+}
+
