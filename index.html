@@ -24,14 +24,15 @@
     />
     <link rel="manifest" href="Assets/site.webmanifest" />
     <link rel="stylesheet" href="CSS/ui.css" />
-    <link rel="stylesheet" href="CSS/CRY1700_basic.css" />
+    <link rel="stylesheet" href="CSS/labeltemplates/globals.css" id="stl-lbl-global"/>
+    <link rel="stylesheet" href="CSS/labeltemplates/specific/CRY1700.css">
   </head>
 
   <body>
     <div id="ui" class="no-print">
       <div class="ui-title">
-        <h1>Sample Label Maker v.0.8</h1>
-        <em>v0.8: QRiousity killed lachat</em>
+        <h1>Sample Label Maker v.0.9</h1>
+        <em>v0.9: hip hopscotch</em>
         <p>By: Ariel Lisogorsky</p>
         <em>works best in chrome</em>
         <p id="infoline-static">
@@ -140,11 +141,9 @@
           </div>
           <label for="in-skip-start">Preceding Blank Spots </label>
           <input
-            type="number"
+            type="text"
             name="in-skip-start"
             id="in-skip-start"
-            min="0"
-            max="84"
             value="0"
             class="update_on_change"
           />

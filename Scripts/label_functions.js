@@ -36,8 +36,8 @@ function createLabelElement(
   }
   new_label.innerHTML =
     "<p>" +
-    labelSet +
-    "<br/> <b>" +
+    (labelSet ? labelSet + "<br/>" : "") +
+    " <b>" +
     labelName +
     "</b> <br/> " +
     labelOwner +
@@ -51,12 +51,12 @@ function populateLabels(
   labelSets,
   labelOwner,
   labelDate = new Date().toISOString().slice(0, 10),
-  skip_start = 0,
+  skip_start = [0],
+  labelsPerPage = 85,
   page_break_set = false,
   specialLabels = false
 ) {
-  const labelsPerPage = 85;
-
+  let nPages = 0;
   //remove any existing labels
   const labelContainer = document.getElementById("labels");
   labelContainer.textContent = "";
@@ -64,14 +64,19 @@ function populateLabels(
   //create a first page
   const firstPage = document.createElement("div");
   firstPage.classList.add("labelgrid");
-  labelContainer.appendChild(firstPage);
-
-  for (let empty_i = 0; empty_i < skip_start % 85; empty_i++) {
-    let emptyDiv = document.createElement("div");
-    emptyDiv.classList.add("label");
-    firstPage.appendChild(emptyDiv);
+  if (skip_start[nPages]) {
+    for (
+      let empty_i = 0;
+      empty_i < skip_start[nPages] % labelsPerPage;
+      empty_i++
+    ) {
+      let emptyDiv = document.createElement("div");
+      emptyDiv.classList.add("label");
+      firstPage.appendChild(emptyDiv);
+    }
   }
-
+  nPages++;
+  labelContainer.appendChild(firstPage);
   //loop over label sets
   for (let label_i = 0; label_i < labelSets.length; label_i++) {
     const label_set = labelSets[label_i];
@@ -92,6 +97,16 @@ function populateLabels(
       if (labelContainer.lastElementChild.childElementCount >= labelsPerPage) {
         let new_label_page = document.createElement("div");
         new_label_page.classList.add("labelgrid");
+        for (
+          let empty_i = 0;
+          empty_i < skip_start[nPages] % labelsPerPage;
+          empty_i++
+        ) {
+          let emptyDiv = document.createElement("div");
+          emptyDiv.classList.add("label");
+          new_label_page.appendChild(emptyDiv);
+        }
+        nPages++;
         labelContainer.appendChild(new_label_page);
       }
 
@@ -103,6 +118,16 @@ function populateLabels(
     // page break set and `(i+1) < length` (not on last set)
     if (page_break_set & (label_i + 1 < labelSets.length)) {
       let new_label_page = document.createElement("div");
+      for (
+        let empty_i = 0;
+        empty_i < skip_start[nPages] % labelsPerPage;
+        empty_i++
+      ) {
+        let emptyDiv = document.createElement("div");
+        emptyDiv.classList.add("label");
+        new_label_page.appendChild(emptyDiv);
+      }
+      nPages++;
       new_label_page.classList.add("labelgrid");
       labelContainer.appendChild(new_label_page);
     }
