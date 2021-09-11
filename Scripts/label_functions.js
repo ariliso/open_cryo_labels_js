@@ -24,6 +24,8 @@ function createLabelElement(
         printPar &&
           (lblPar.innerHTML = `${labelName} ${
             labelOwner && "<br/>" + labelOwner
+          } ${
+            labelDate && "<br/>" + labelDate
           }`);
         lblPar.style.paddingRight = "1em";
         new_label.appendChild(lblPar);
