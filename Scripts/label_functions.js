@@ -16,7 +16,7 @@ function createLabelElement(
       case "#QR":
         var QR = QRCode.generateSVG(labelName, {
           ecclevel: "M",
-          margin: 0.002,
+          margin: 0.004,
         });
         QR.style.height = "100%";
         QR.style.minHeight = "100%";
@@ -29,6 +29,7 @@ function createLabelElement(
           }`);
         lblPar.style.paddingRight = "1em";
         new_label.appendChild(lblPar);
+        lblPar.style.fontSize = "6pt"
         new_label.appendChild(QR);
         return new_label;
 
