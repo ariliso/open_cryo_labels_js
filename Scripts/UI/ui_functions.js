@@ -250,6 +250,11 @@ function populateUI() {
   // Fill combo box
   updateLabelSelectorBox(default_label_sets);
 
+  // Restore attn value
+  document
+    .querySelector("#in-txt-attn")
+    .value = localStorage.getItem('labels-last-attn') || ""
+  
   // fix date
   document.getElementById("in-date-select").value = new Date()
     .toISOString()
@@ -295,6 +300,11 @@ function refreshEventHandlers() {
   document
     .querySelector("#bt-load-conf")
     .addEventListener("change", readConfigFile, false);
+
+  document
+    .querySelector('#in-txt-attn')
+    .addEventListener("change", (e) => {
+      window.localStorage.setItem('labels-last-attn',e.target.value)})
 }
 
 // --------------- UI Updating Functions ----------------------------------
