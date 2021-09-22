@@ -8,11 +8,3 @@
 
 Currently github pages is being used to host. The project can be accessed at [https://ariliso.github.io/open_cryo_labels_js/](https://ariliso.github.io/open_cryo_labels_js/)
 A beta version is available at [https://lcry1700-testing.netlify.app/](https://lcry1700-testing.netlify.app/)
-
-## offline version
-
-download the files in [./web_files](./web_files) and open [basic_frame.html](./web_files/basic_frame.html)
-in google chrome. sample names are loaded with a text file containing one sample per line.
-sample sets are currently implemented with JSON embeded in the html document
-this should all be fairly transparent for use though the relevant JSON should be modified.
-alternatively a new method of loadig commonly used sample sets should be investigated.
