@@ -1,0 +1,66 @@
+@import url("https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400;1,700&display=swap");
+@page {
+  size: letter;
+  margin: 0mm;
+}
+@media screen {
+  .label {
+    border-style: dotted;
+    border-radius: 0.125in;
+  }
+}
+@media print {
+  .label {
+    border-style: none;
+  }
+  .labelgrid {
+    page-break-after: always;
+  }
+  body {
+    margin: 0mm;
+  }
+  .no-print,
+  .no-print * {
+    display: none !important;
+  }
+}
+.labelgrid {
+  display: grid;
+  box-sizing: border-box;
+
+  width: 8.5in;
+  height: 11in;
+  padding: 0.24in 0.77in;
+
+  grid-template-columns: repeat(5, 1.28in);
+  grid-template-rows: repeat(17, 0.5in);
+
+  column-gap: 0.12in;
+  row-gap: 0.13in;
+
+  justify-content: center;
+  align-content: center;
+  justify-items: center;
+  align-items: center;
+}
+
+.label {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  box-sizing: border-box;
+  width: 1.28in;
+  height: 0.5in;
+  padding: 2%;
+
+  overflow: hidden;
+
+  font-family:  'Atkinson Hyperlegible', Arial, Helvetica, sans-serif;
+  font-size: 8pt;
+  font-weight: 100;
+  text-align: center;
+}
+.label b {
+  font-weight: bold;
+}
