@@ -13,26 +13,48 @@ function createLabelElement(
     switch (labelSet) {
       case "#QRonly":
         printPar = false;
-      case "#QR":
-        var QR = QRCode.generateSVG(labelName, {
-          ecclevel: "M",
-          margin: 0.004,
-        });
-        QR.style.height = "100%";
+        new_label.classList.add("image-only");
+        case "#QR":
+          var QR = QRCode.generateSVG(labelName, {
+            ecclevel: "M",
+            margin: 0.004,
+          });
+          QR.style.height = "100%";
         QR.style.minHeight = "100%";
         QR.style.flexShrink = 0;
         printPar &&
           (lblPar.innerHTML = `${labelName} ${
             labelOwner && "<br/>" + labelOwner
-          } ${
-            labelDate && "<br/>" + labelDate
-          }`);
+          } ${labelDate && "<br/>" + labelDate}`);
         lblPar.style.paddingRight = "1em";
         new_label.appendChild(lblPar);
-        lblPar.style.fontSize = "6pt"
+        lblPar.style.fontSize = "6pt";
         new_label.appendChild(QR);
+        QR.classList.add("label-image","barcode-2d")
         return new_label;
-
+      case "#C128only":
+        printPar = false;
+        new_label.classList.add("image-only");
+      case "#C128":
+        var barcode = document.createElementNS(
+          "http://www.w3.org/2000/svg",
+          "svg"
+        );
+        new_label.appendChild(barcode);
+        barcode.classList.add("jsbarcode","horiz-barcode", "label-image")
+        new_label.classList.add("label-vert")
+        barcode.setAttribute("jsbarcode-value",labelName);
+        barcode.setAttribute("jsbarcode-width",2);
+        barcode.setAttribute("jsbarcode-height", 20);
+        barcode.setAttribute("jsbarcode-textmargin",0);
+        barcode.setAttribute("jsbarcode-margin",0);
+        barcode.setAttribute("jsbarcode-fontSize", 6);
+        printPar &&
+        (lblPar.innerHTML = `${labelOwner} ${
+          labelDate && "<br/>" + labelDate
+        }`);
+        new_label.appendChild(lblPar);
+        return new_label;
       default:
         break;
     }

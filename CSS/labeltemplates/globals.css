@@ -90,3 +90,23 @@
 .label b {
   font-weight: bold;
 }
+
+.label.label-vert {
+  flex-direction: column;
+}
+.label.label-vert svg {
+  min-height: 30%;
+  max-height: 100%;
+  max-width: 95%;
+  flex: 2 1 auto;
+  margin-top: 0;
+}
+.label.label-vert p {
+  margin-top: 0;
+  margin-bottom: 0.01rem;
+  min-height:2em;
+  font-size: 0.5em;
+}
+.label.image-only p {
+  display: none;
+}

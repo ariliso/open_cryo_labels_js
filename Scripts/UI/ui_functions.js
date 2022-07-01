@@ -478,6 +478,7 @@ function updateLabels(e) {
     include_QR
   );
   updateInfoLine(name_list.length, label_set.length, skip_start);
+  JsBarcode(".jsbarcode").init()
 }
 
 function updateInfoLine(n_names, n_sets, skip_start) {
