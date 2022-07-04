@@ -7,68 +7,93 @@ function createLabelElement(
 ) {
   let new_label = document.createElement("div");
   new_label.classList.add("label");
+  const lbltxt = document.createElement("div");
+  lbltxt.classList.add("label-text");
+
   if (specialLabels & (labelSet.charAt(0) == "#")) {
-    let lblPar = document.createElement("p");
-    let printPar = true;
-    switch (labelSet) {
-      case "#QRonly":
-        printPar = false;
-        new_label.classList.add("image-only");
-        case "#QR":
-          var QR = QRCode.generateSVG(labelName, {
-            ecclevel: "M",
-            margin: 0.004,
-          });
-          QR.style.height = "100%";
+    // const specialType = /(?<=^#\**)[^\*].+ ?/.exec(labelSet)[0];
+    let {
+      groups: {
+        altType,
+        lblType: specialType,
+        subset: namedSpecialSubset,
+        subsetSep,
+        subsetLoc,
+      },
+    } = /(?<=^#)(?<altType>\**)?(?<lblType>.[^\*].*?)(?:(?: *\/(?:(?<subsetLoc>[an])\/)?(?:(?<subsetSep>.*)\/)? *)(?<subset>.*)?)?$/gm.exec(
+      labelSet
+    ) || {
+      groups: {
+        altType: "",
+        lblType: "",
+        subset: "",
+        subsetSep: "",
+        subsetLoc: "",
+      },
+    };
+    const altVersion = altType && altType.length;
+    new_label.classList.add(
+      "label-special",
+      altVersion ? "alt-" + altVersion : "default-version"
+    );
+    if (namedSpecialSubset) {
+      if (altVersion && ! (subsetLoc)) {subsetLoc = "n"}
+      switch (subsetLoc) {
+        case "n": // add subset in name field
+          labelName += (subsetSep || " - ") + namedSpecialSubset;
+          break;
+        case "a": // add subset in ATTN field
+        default:
+          labelOwner += (subsetSep || "/") + namedSpecialSubset;
+      }
+    }
+    switch (specialType) {
+      case "QR":
+        var QR = QRCode.generateSVG(labelName, {
+          ecclevel: "M",
+          margin: 0.004,
+        });
+        QR.style.height = "100%";
         QR.style.minHeight = "100%";
         QR.style.flexShrink = 0;
-        printPar &&
-          (lblPar.innerHTML = `${labelName} ${
-            labelOwner && "<br/>" + labelOwner
-          } ${labelDate && "<br/>" + labelDate}`);
-        lblPar.style.paddingRight = "1em";
-        new_label.appendChild(lblPar);
-        lblPar.style.fontSize = "6pt";
         new_label.appendChild(QR);
-        QR.classList.add("label-image","barcode-2d")
-        return new_label;
-      case "#C128only":
-        printPar = false;
-        new_label.classList.add("image-only");
-      case "#C128":
+        QR.classList.add("label-image", "barcode-2d");
+        new_label.classList.add("label-QR", "label-horiz");
+        break;
+      case "C128":
+        if (!labelName) {return new_label;}
         var barcode = document.createElementNS(
           "http://www.w3.org/2000/svg",
           "svg"
         );
         new_label.appendChild(barcode);
-        barcode.classList.add("jsbarcode","horiz-barcode", "label-image")
-        new_label.classList.add("label-vert")
-        barcode.setAttribute("jsbarcode-value",labelName);
-        barcode.setAttribute("jsbarcode-width",2);
-        barcode.setAttribute("jsbarcode-height", 20);
-        barcode.setAttribute("jsbarcode-textmargin",0);
-        barcode.setAttribute("jsbarcode-margin",0);
-        barcode.setAttribute("jsbarcode-fontSize", 6);
-        printPar &&
-        (lblPar.innerHTML = `${labelOwner} ${
-          labelDate && "<br/>" + labelDate
-        }`);
-        new_label.appendChild(lblPar);
-        return new_label;
+        barcode.classList.add("jsbarcode", "horiz-barcode", "label-image");
+        new_label.classList.add("label-vert");
+        barcode.setAttribute("preserveAspectRatio", "none");
+        barcode.setAttribute("jsbarcode-value", labelName);
+        barcode.setAttribute("jsbarcode-width", 2);
+        barcode.setAttribute("jsbarcode-height", 10);
+        barcode.setAttribute("jsbarcode-textmargin", 0);
+        barcode.setAttribute("jsbarcode-margin", 0);
+        barcode.setAttribute("jsbarcode-displayvalue", false);
+        break;
       default:
         break;
     }
   }
-  new_label.innerHTML =
-    "<p>" +
-    (labelSet ? labelSet + "<br/>" : "") +
-    " <b>" +
-    labelName +
-    "</b> <br/> " +
-    labelOwner +
-    "   " +
-    labelDate +
-    "</p>";
+  const labelTxtContent = {
+    "txt-set": labelSet,
+    "txt-name": labelName,
+    "txt-owner": labelOwner,
+    "txt-date": labelDate,
+  };
+  for (const txtProp in labelTxtContent) {
+    let txtSection = document.createElement("span");
+    txtSection.classList.add(txtProp);
+    txtSection.textContent = labelTxtContent[txtProp];
+    lbltxt.appendChild(txtSection);
+  }
+  new_label.appendChild(lbltxt);
   return new_label;
 }
 function populateLabels(

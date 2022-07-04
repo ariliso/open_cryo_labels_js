@@ -1,4 +1,5 @@
 @import url("https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400;1,700&display=swap");
+@import "barcodes.css";
 @page {
   size: letter;
   margin: 0mm;
@@ -6,7 +7,6 @@
 @media screen {
   .label {
     border-style: dotted;
-
   }
 }
 @media print {
@@ -37,37 +37,43 @@
   --label-height: 0.5in;
 
   --label-pitch-vert: 0.63in;
-  --label-pitch-hor:  1.4in;
+  --label-pitch-hor: 1.4in;
 
   --top-margin: 0.24in;
   --side-margin: 0.77in;
 
-  --col-gap-calc: var(--col-gap,calc(var(--label-pitch-hor) - var(--label-width)));
-  --row-gap-calc: var(--col-gap,calc(var(--label-pitch-hor) - var(--label-width)));
+  --col-gap-calc: var(
+    --col-gap,
+    calc(var(--label-pitch-hor) - var(--label-width))
+  );
+  --row-gap-calc: var(
+    --col-gap,
+    calc(var(--label-pitch-hor) - var(--label-width))
+  );
 
   --bottom-margin: var(--top-margin);
-  --right-margin: var(--side-margin,var(--left-margin));
-  --left-margin: var(--side-margin,var(--right-margin));
-
-
+  --right-margin: var(--side-margin, var(--left-margin));
+  --left-margin: var(--side-margin, var(--right-margin));
 
   display: grid;
   box-sizing: border-box;
-  
+
   justify-content: center;
   align-content: center;
   justify-items: center;
   align-items: center;
 
-  width: var(--page-width,8.5in);
-  height: var(--page-height,11in);
-  padding: var(--top-margin) var(--right-margin,var(--side-margin)) var(--bottom-margin,var(--top-margin)) var(--left-margin,var(--side-margin));
+  width: var(--page-width, 8.5in);
+  height: var(--page-height, 11in);
+  padding: var(--top-margin) var(--right-margin, var(--side-margin))
+    var(--bottom-margin, var(--top-margin))
+    var(--left-margin, var(--side-margin));
 
-  grid-template-columns: repeat(var(--n-cols),var(--label-width));
+  grid-template-columns: repeat(var(--n-cols), var(--label-width));
   grid-template-rows: repeat(var(--n-rows), var(--label-height));
 
-  column-gap: var(--col-gap,var(--col-gap-calc));
-  row-gap: var(--row-gap,var(--col-gap-calc));
+  column-gap: var(--col-gap, var(--col-gap-calc));
+  row-gap: var(--row-gap, var(--col-gap-calc));
 }
 
 .label {
@@ -82,31 +88,20 @@
 
   overflow: hidden;
 
-  font-family:  'Atkinson Hyperlegible', Arial, Helvetica, sans-serif;
+  font-family: "Atkinson Hyperlegible", Arial, Helvetica, sans-serif;
   font-size: 8pt;
   font-weight: 100;
   text-align: center;
 }
-.label b {
+.label .label-text .txt-name {
   font-weight: bold;
 }
+.label .label-text span {
+  display: block;
+  max-width: 100%
+}
 
-.label.label-vert {
-  flex-direction: column;
-}
-.label.label-vert svg {
-  min-height: 30%;
-  max-height: 100%;
-  max-width: 95%;
-  flex: 2 1 auto;
-  margin-top: 0;
-}
-.label.label-vert p {
-  margin-top: 0;
-  margin-bottom: 0.01rem;
-  min-height:2em;
-  font-size: 0.5em;
-}
-.label.image-only p {
-  display: none;
+.label > .label-text > .txt-date, .label > .label-text > .txt-owner {
+  display: inline-block;
+  margin-inline: 0.4em;
 }

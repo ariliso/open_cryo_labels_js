@@ -52,5 +52,16 @@
   ],
   "#QR": [
     "#QR"
+  ],
+  "DEMO-BARCODES": [
+    "BARCODE Feats",
+    "#QR",
+    "#C128",
+    "#*QR",
+    "#*C128",
+    "#C128/subset",
+    "#*C128/n/sub1",
+    "#QR/n/-|>/subset",
+    "#QR/a/x/sunset"
   ]
 }
