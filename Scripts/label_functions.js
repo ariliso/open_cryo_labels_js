@@ -20,7 +20,7 @@ function createLabelElement(
         subsetSep,
         subsetLoc,
       },
-    } = /(?<=^#)(?<altType>\**)?(?<lblType>.[^\*].*?)(?:(?: *\/(?:(?<subsetLoc>[an])\/)?(?:(?<subsetSep>.*)\/)? *)(?<subset>.*)?)?$/gm.exec(
+    } = /(?<=^#)(?<altType>\**)?(?<lblType>[^\*].*?)(?:(?: *\/(?:(?<subsetLoc>[an])\/)?(?:(?<subsetSep>.*)\/)? *)(?<subset>.*)?)?$/gm.exec(
       labelSet
     ) || {
       groups: {

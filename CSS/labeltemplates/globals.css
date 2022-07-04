@@ -98,10 +98,11 @@
 }
 .label .label-text span {
   display: block;
-  max-width: 100%
+  max-width: 100%;
+  line-height: 0.8em;
 }
 
 .label > .label-text > .txt-date, .label > .label-text > .txt-owner {
   display: inline-block;
-  margin-inline: 0.4em;
+  margin-inline: 0.2em;
 }
