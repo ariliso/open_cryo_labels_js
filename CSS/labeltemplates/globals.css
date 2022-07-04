@@ -63,6 +63,9 @@
   justify-items: center;
   align-items: center;
 
+  counter-reset: label-no-in-page;
+  counter-increment: label-page-no;
+
   width: var(--page-width, 8.5in);
   height: var(--page-height, 11in);
   padding: var(--top-margin) var(--right-margin, var(--side-margin))
@@ -92,6 +95,27 @@
   font-size: 8pt;
   font-weight: 100;
   text-align: center;
+
+  counter-increment: label-no-in-page;
+}
+.label:hover {
+  position:relative;
+}
+.label:hover > * {
+  z-index: 1;
+}
+.label:hover::before {
+  background-color: darkorange;
+  content: counter(label-page-no)"."counter(label-no-in-page);
+  position: absolute;
+  width: 150%;
+  height: 100%;
+  opacity: 85%;
+  color:rgb(3, 87, 123);
+  font-size: min(calc(var(--label-height)*0.7),calc(var(--label-width)* 0.8 / 0.1 em / 10));
+  font-weight: 900;
+  box-sizing: border-box;
+  z-index: 2;
 }
 .label .label-text .txt-name {
   font-weight: bold;
